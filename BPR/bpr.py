@@ -54,7 +54,7 @@ def filter_last_5_days(events):
 def sort_and_display_last_5_days(ics_url):
     st.subheader('Fetching and processing data, please wait for 15-20 seconds...')
     
-    with st.spinner('Fetching and processing data..., please wait for 15-20 seconds'):
+    with st.spinner('Fetching and processing data takes 15-20 seconds...'):
         ics_data = fetch_ics_from_url(ics_url)
 
         if ics_data:
