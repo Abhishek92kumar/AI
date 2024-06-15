@@ -94,6 +94,6 @@ ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42
 
 if st.button("Fetch and Display Schedule"):
     sort_and_display_last_5_days(ics_url)
-    # st.subheader('It takes between 15- 20 seconds', divider='rainbow')
+    st.subheader('It takes between 15- 20 seconds', divider='rainbow')
 
 
