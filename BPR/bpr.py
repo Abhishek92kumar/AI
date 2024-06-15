@@ -102,7 +102,7 @@ st.markdown("""
         }
         .styled-table thead tr {
             background-color: #009879;
-            color: #ffffff;
+            color: ##444444;
             text-align: left;
         }
         .styled-table th,
