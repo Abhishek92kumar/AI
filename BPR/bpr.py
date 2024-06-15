@@ -3,7 +3,9 @@ from ics import Calendar
 from datetime import datetime, timedelta
 import pandas as pd
 import requests
+
 st.set_page_config(page_title='Aakash Automated BPR', page_icon='🎉')
+
 def fetch_ics_from_url(ics_url):
     response = requests.get(ics_url)
     if response.status_code == 200:
@@ -50,52 +52,53 @@ def filter_last_5_days(events):
     return sorted(last_5_days_events, key=lambda x: (x['Class'], x['start_time']), reverse=True)
 
 def sort_and_display_last_5_days(ics_url):
-    st.subheader('It takes between 15- 20 seconds', divider='rainbow')
+    st.subheader('Fetching and processing data, please wait...')
+    
+    with st.spinner('Fetching and processing data...'):
+        ics_data = fetch_ics_from_url(ics_url)
 
-    ics_data = fetch_ics_from_url(ics_url)
+        if ics_data:
+            calendar = Calendar(ics_data)
+            events = []
 
-    if ics_data:
-        calendar = Calendar(ics_data)
-        events = []
+            for event in calendar.events:
+                start_time = getattr(event, 'begin', '').datetime
+                end_time = getattr(event, 'end', '').datetime
 
-        for event in calendar.events:
-            start_time = getattr(event, 'begin', '').datetime
-            end_time = getattr(event, 'end', '').datetime
+                event_info = {
+                    'Class': substitute_class(getattr(event, 'location', 'Unknown Location')),
+                    'Duration': calculate_duration(start_time, end_time),
+                    'Date': get_date(start_time),
+                    'Time': get_time(start_time),
+                    'Day': get_day(start_time),
+                    'start_time': start_time,
+                    'end_time': end_time,
+                    'Location': getattr(event, 'location', 'Unknown Location')
+                }
+                events.append(event_info)
 
-            event_info = {
-                'Class': substitute_class(getattr(event, 'location', 'Unknown Location')),
-                'Duration': calculate_duration(start_time, end_time),
-                'Date': get_date(start_time),
-                'Time': get_time(start_time),
-                'Day': get_day(start_time),
-                'start_time': start_time,
-                'end_time': end_time,
-                'Location': getattr(event, 'location', 'Unknown Location')
-            }
-            events.append(event_info)
+            last_5_days_events = filter_last_5_days(events)
+            classes = {'CCFI': [], 'CRH': [], 'CTYJ': [], 'CPSA': []}
+            for event in last_5_days_events:
+                if event['Class'] in classes:
+                    classes[event['Class']].append(event)
 
-        last_5_days_events = filter_last_5_days(events)
-        classes = {'CCFI': [], 'CRH': [], 'CTYJ': [], 'CPSA': []}
-        for event in last_5_days_events:
-            if event['Class'] in classes:
-                classes[event['Class']].append(event)
-
-        for class_name, events in classes.items():
-            if events:
-                df = pd.DataFrame(events).drop(columns=['start_time', 'end_time'])
-                st.subheader(f"Class: {class_name}")
-                st.dataframe(df)
+            for class_name, events in classes.items():
+                if events:
+                    df = pd.DataFrame(events).drop(columns=['start_time', 'end_time'])
+                    st.subheader(f"Class: {class_name}")
+                    st.dataframe(df.style.set_table_styles(
+                        [{'selector': 'tr:nth-child(even)',
+                          'props': [('background-color', '#f2f2f2')]}]
+                    ))
 
 # Streamlit app
 st.title("Class Schedule Viewer")
-# st.title("Class Schedule Viewer")
-ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"
-
 
 # ics_url = st.text_input("Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics")
+# ics_url = st.secrets["ics_url"]  # Fetch the URL from Streamlit secrets
+ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"  # Fetch the URL from Streamlit secrets
+
 
 if st.button("Fetch and Display Schedule"):
     sort_and_display_last_5_days(ics_url)
-    # st.subheader('It takes between 15- 20 seconds', divider='rainbow')
-
-
