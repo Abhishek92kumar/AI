@@ -52,8 +52,6 @@ def filter_last_5_days(events):
     return sorted(last_5_days_events, key=lambda x: (x['Class'], x['start_time']), reverse=True)
 
 def sort_and_display_last_5_days(ics_url):
-    # st.subheader('Fetching and processing data, please wait for 15-20 seconds...')
-    
     with st.spinner('Fetching and processing data takes 15-20 seconds...'):
         ics_data = fetch_ics_from_url(ics_url)
 
@@ -87,10 +85,8 @@ def sort_and_display_last_5_days(ics_url):
                 if events:
                     df = pd.DataFrame(events).drop(columns=['start_time', 'end_time'])
                     st.subheader(f"Class: {class_name}")
-                    st.dataframe(df.style.set_table_styles(
-                        [{'selector': 'tr:nth-child(even)',
-                          'props': [('background-color', '#f2f2f2')]}]
-                    ))
+                    st.markdown(df.to_html(index=False, classes='styled-table'), unsafe_allow_html=True)
+
 # Custom CSS for table styling
 st.markdown("""
     <style>
@@ -113,10 +109,11 @@ st.markdown("""
         }
         .styled-table tbody tr {
             border-bottom: 1px solid #dddddd;
-            background-color: #f8f9fa;
+            background-color: #2d2d2d;
+            color: #ffffff;
         }
         .styled-table tbody tr:nth-of-type(even) {
-            background-color: #e9ecef;
+            background-color: #3e3e3e;
         }
         .styled-table tbody tr:last-of-type {
             border-bottom: 2px solid #009879;
@@ -127,10 +124,8 @@ st.markdown("""
 # Streamlit app
 st.title("Class Schedule Viewer")
 
-# ics_url = st.text_input("Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics")
-# ics_url = st.secrets["ics_url"]  # Fetch the URL from Streamlit secrets
+# Fetch the URL from Streamlit secrets
 ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"  # Fetch the URL from Streamlit secrets
-
 
 if st.button("Fetch and Display Schedule"):
     sort_and_display_last_5_days(ics_url)
