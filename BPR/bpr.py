@@ -86,6 +86,7 @@ def sort_and_display_last_5_days(ics_url):
 
 # Streamlit app
 st.title("Class Schedule Viewer")
+# st.title("Class Schedule Viewer")
 ics_url = "Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"
 
 
@@ -93,3 +94,6 @@ ics_url = "Enter the URL of the ICS file", "https://outlook.office365.com/owa/ca
 
 if st.button("Fetch and Display Schedule"):
     sort_and_display_last_5_days(ics_url)
+    st.subheader('It takes between 15- 20 seconds', divider='rainbow')
+
+
