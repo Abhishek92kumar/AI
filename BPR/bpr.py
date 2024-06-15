@@ -3,9 +3,7 @@ from ics import Calendar
 from datetime import datetime, timedelta
 import pandas as pd
 import requests
-# st.set_page_config(page_title='Your App Title', page_icon='BPR/Aakash.ico')
 st.set_page_config(page_title='Aakash Automated BPR', page_icon='🎉')
-
 def fetch_ics_from_url(ics_url):
     response = requests.get(ics_url)
     if response.status_code == 200:
@@ -32,6 +30,8 @@ def get_day(start_time):
 def substitute_class(location):
     class_substitutions = {
         'KK108-CPSA-2024-104667': 'CPSA',
+        'KK108-TW09-2024-100425': 'CCFI',
+        'KK108-2W09-2024-101706': 'CTYJ',
         'KK108-RM08-2024-103459': 'CRH',
         'KK108-TW09-2024-103472': 'CCFI',
         'KK108-2W09-2024-103485': 'CTYJ',
@@ -43,7 +43,7 @@ def filter_last_5_days(events):
     seen_events = set()
     last_5_days_events = [
         event for event in events
-        if today - timedelta(days=5) <= event['start_time'].date() <= today
+        if today - timedelta(days=15) <= event['start_time'].date() <= today
         and (event['Location'], event['start_time'], event['end_time']) not in seen_events
     ]
     seen_events.update((event['Location'], event['start_time'], event['end_time']) for event in last_5_days_events)
@@ -85,10 +85,9 @@ def sort_and_display_last_5_days(ics_url):
                 st.dataframe(df)
 
 # Streamlit app
-st.title("Automated BPR")
-
-ics_url = st.text_input("Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics")
+st.title("Class Schedule Viewer")
+ics_url = ("Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics")
+# ics_url = st.text_input("Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics")
 
 if st.button("Fetch and Display Schedule"):
     sort_and_display_last_5_days(ics_url)
-
