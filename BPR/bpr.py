@@ -110,7 +110,7 @@ st.markdown("""
             padding: 12px 15px;
         }
         .styled-table tbody tr {
-            border-bottom: 1px solid #dddddd;
+            border-bottom: 1px solid #5b5b5b;
         }
         .styled-table tbody tr:nth-of-type(even) {
             background-color: #e9ecef;
