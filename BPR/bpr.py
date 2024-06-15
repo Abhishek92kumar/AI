@@ -52,9 +52,9 @@ def filter_last_5_days(events):
     return sorted(last_5_days_events, key=lambda x: (x['Class'], x['start_time']), reverse=True)
 
 def sort_and_display_last_5_days(ics_url):
-    # st.subheader('Fetching and processing data, please wait for 15-20 seconds...')
+    st.subheader('Fetching and processing data, please wait...')
     
-    with st.spinner('Fetching and processing data takes 15-20 seconds...'):
+    with st.spinner('Fetching and processing data...'):
         ics_data = fetch_ics_from_url(ics_url)
 
         if ics_data:
@@ -87,18 +87,41 @@ def sort_and_display_last_5_days(ics_url):
                 if events:
                     df = pd.DataFrame(events).drop(columns=['start_time', 'end_time'])
                     st.subheader(f"Class: {class_name}")
-                    st.dataframe(df.style.set_table_styles(
-                        [{'selector': 'tr:nth-child(even)',
-                          'props': [('background-color', '#f2f2f2')]}]
-                    ))
+                    st.markdown(df.to_html(index=False, classes='table'), unsafe_allow_html=True)
+
+# Custom CSS for table styling
+st.markdown("""
+    <style>
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border-collapse: collapse;
+        }
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .table tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0,0,0,.05);
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # Streamlit app
 st.title("Class Schedule Viewer")
 
 # ics_url = st.text_input("Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics")
-# ics_url = st.secrets["ics_url"]  # Fetch the URL from Streamlit secrets
-ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"  # Fetch the URL from Streamlit secrets
-
+ics_url = st.secrets["ics_url"]  # Fetch the URL from Streamlit secrets
 
 if st.button("Fetch and Display Schedule"):
     sort_and_display_last_5_days(ics_url)
