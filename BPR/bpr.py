@@ -91,6 +91,38 @@ def sort_and_display_last_5_days(ics_url):
                         [{'selector': 'tr:nth-child(even)',
                           'props': [('background-color', '#f2f2f2')]}]
                     ))
+# Custom CSS for table styling
+st.markdown("""
+    <style>
+        .styled-table {
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            font-family: 'Trebuchet MS', sans-serif;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+        .styled-table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+        }
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+        }
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+            background-color: #f8f9fa;
+        }
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #e9ecef;
+        }
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # Streamlit app
 st.title("Class Schedule Viewer")
