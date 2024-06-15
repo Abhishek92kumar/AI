@@ -87,32 +87,36 @@ def sort_and_display_last_5_days(ics_url):
                 if events:
                     df = pd.DataFrame(events).drop(columns=['start_time', 'end_time'])
                     st.subheader(f"Class: {class_name}")
-                    st.markdown(df.to_html(index=False, classes='table'), unsafe_allow_html=True)
+                    st.markdown(df.to_html(index=False, classes='styled-table'), unsafe_allow_html=True)
 
 # Custom CSS for table styling
 st.markdown("""
     <style>
-        .table {
-            width: 100%;
-            margin-bottom: 1rem;
-            color: #212529;
+        .styled-table {
             border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            font-family: 'Trebuchet MS', sans-serif;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
         }
-        .table th,
-        .table td {
-            padding: 0.75rem;
-            vertical-align: top;
-            border-top: 1px solid #dee2e6;
+        .styled-table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
         }
-        .table thead th {
-            vertical-align: bottom;
-            border-bottom: 2px solid #dee2e6;
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
         }
-        .table tbody + tbody {
-            border-top: 2px solid #dee2e6;
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
         }
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(0,0,0,.05);
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -120,9 +124,8 @@ st.markdown("""
 # Streamlit app
 st.title("Class Schedule Viewer")
 
-ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"
-# ics_url = st.text_input("Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics")
-# ics_url = st.secrets["ics_url"]  # Fetch the URL from Streamlit secrets
-
+# Fetch the URL from Streamlit secrets
+# ics_url = st.secrets["ics_url"]
+ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"  # Fetch the URL from Streamlit secrets
 if st.button("Fetch and Display Schedule"):
     sort_and_display_last_5_days(ics_url)
