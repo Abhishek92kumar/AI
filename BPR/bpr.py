@@ -3,7 +3,7 @@ from ics import Calendar
 from datetime import datetime, timedelta
 import pandas as pd
 import requests
-st.set_page_config(page_title='Aakash Automated BPR', page_icon='🎉')
+
 def fetch_ics_from_url(ics_url):
     response = requests.get(ics_url)
     if response.status_code == 200:
@@ -86,8 +86,8 @@ def sort_and_display_last_5_days(ics_url):
 
 # Streamlit app
 st.title("Class Schedule Viewer")
-ics_url = "Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"
-# ics_url = st.text_input("Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics")
+
+ics_url = st.text_input("Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics")
 
 if st.button("Fetch and Display Schedule"):
     sort_and_display_last_5_days(ics_url)
