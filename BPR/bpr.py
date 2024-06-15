@@ -52,9 +52,9 @@ def filter_last_5_days(events):
     return sorted(last_5_days_events, key=lambda x: (x['Class'], x['start_time']), reverse=True)
 
 def sort_and_display_last_5_days(ics_url):
-    st.subheader('Fetching and processing data, please wait...')
+    st.subheader('Fetching and processing data, please wait for 15-20 seconds...')
     
-    with st.spinner('Fetching and processing data...'):
+    with st.spinner('Fetching and processing data..., please wait for 15-20 seconds'):
         ics_data = fetch_ics_from_url(ics_url)
 
         if ics_data:
