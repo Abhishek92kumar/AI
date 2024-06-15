@@ -3,7 +3,7 @@ from ics import Calendar
 from datetime import datetime, timedelta
 import pandas as pd
 import requests
-
+st.set_page_config(page_title='Aakash Automated BPR', page_icon='🎉')
 def fetch_ics_from_url(ics_url):
     response = requests.get(ics_url)
     if response.status_code == 200:
