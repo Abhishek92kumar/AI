@@ -120,8 +120,9 @@ st.markdown("""
 # Streamlit app
 st.title("Class Schedule Viewer")
 
+ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"
 # ics_url = st.text_input("Enter the URL of the ICS file", "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics")
-ics_url = st.secrets["ics_url"]  # Fetch the URL from Streamlit secrets
+# ics_url = st.secrets["ics_url"]  # Fetch the URL from Streamlit secrets
 
 if st.button("Fetch and Display Schedule"):
     sort_and_display_last_5_days(ics_url)
