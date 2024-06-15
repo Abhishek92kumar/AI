@@ -50,6 +50,8 @@ def filter_last_5_days(events):
     return sorted(last_5_days_events, key=lambda x: (x['Class'], x['start_time']), reverse=True)
 
 def sort_and_display_last_5_days(ics_url):
+    st.subheader('It takes between 15- 20 seconds', divider='rainbow')
+
     ics_data = fetch_ics_from_url(ics_url)
 
     if ics_data:
@@ -94,6 +96,6 @@ ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42
 
 if st.button("Fetch and Display Schedule"):
     sort_and_display_last_5_days(ics_url)
-    st.subheader('It takes between 15- 20 seconds', divider='rainbow')
+    # st.subheader('It takes between 15- 20 seconds', divider='rainbow')
 
 
