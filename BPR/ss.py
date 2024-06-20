@@ -34,6 +34,7 @@ def substitute_class(location):
         'KK108-TW04-2024-103467': 'CCFD',
         'KK108-2W04-2024-103479': 'CTYE',
         'KK108-TW06-2024-103469': 'CCFF',
+        'KK108-RM20-2024-105938': 'CRT',
 
       
         # 'KK108-CPSA-2024-104667': 'CPSA',
@@ -80,7 +81,7 @@ def sort_and_display_last_5_days(ics_url):
             events.append(event_info)
 
         last_5_days_events = filter_last_5_days(events)
-        classes = {'CRN': [], 'CCFF': [], 'CCFD': [], 'CTYE': []}
+        classes = {'CRN': [], 'CCFF': [], 'CCFD': [], 'CTYE': [], 'CRT': []}
         for event in last_5_days_events:
             if event['Class'] in classes:
                 classes[event['Class']].append(event)
