@@ -12,9 +12,16 @@ pdf_paths = [
 ]
 image_dir = "images"
 os.makedirs(image_dir, exist_ok=True)
+database_path = 'students.db'
+csv_output_path = 'students.csv'
 
+# Remove this if do not want to delete the existing database
+if os.path.exists(database_path):
+    os.remove(database_path)
+    
+    
 # Initialize database
-conn = sqlite3.connect('students.db')
+conn = sqlite3.connect('student.db')
 cursor = conn.cursor()
 
 # Create table
@@ -147,6 +154,7 @@ def process_pdfs(pdf_paths):
         
         # Print the updated dataframe
         print(df)
+#         df.to_csv(csv_output_path, index=False)
         
         # Insert data into database
         cursor.executemany('''
@@ -155,6 +163,9 @@ def process_pdfs(pdf_paths):
         ''', student_data)
     
     conn.commit()
+    df = pd.read_sql_query("SELECT * FROM students", conn)
+
+    df.to_csv(csv_output_path, index=False)
     conn.close()
 
 process_pdfs(pdf_paths)
