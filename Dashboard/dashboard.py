@@ -8,11 +8,11 @@ from image_loader import render_image
 # Database path
 database_path = 'student.db'
 image_dir = "images"
-st.set_page_config(page_title='Aakash Students Dashboard', page_icon='🎉')
+# st.set_page_config(page_title='Aakash Students Dashboard', page_icon='🎉')
 
 # Streamlit app
 def main():
-    st.set_page_config(page_title="Student Batch Viewer", layout="wide")
+    st.set_page_config(page_title='Aakash Students Dashboard', page_icon='🎉')
 
     # Connect to the database
     conn = sqlite3.connect(database_path)
