@@ -8,6 +8,7 @@ from image_loader import render_image
 # Database path
 database_path = 'student.db'
 image_dir = "images"
+st.set_page_config(page_title='Aakash Students Dashboard', page_icon='🎉')
 
 # Streamlit app
 def main():
