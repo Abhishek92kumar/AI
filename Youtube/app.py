@@ -112,10 +112,16 @@ with col7:
     st.plotly_chart(fig4,use_container_width=True)
 
 
-_, view4,dwn4 =st.columns([0.1,0.45,0.45])
+_, view4,dwn4 =st.columns([0.5,0.45,0.45])
 with view4:
     result2 =df[["Region","City","TotalSales"]].groupby(by =["Region","City"])["TotalSales"].sum()
     expander= st.expander("View data for Total Sales by Region and City")
     expander.write(result2)
 with dwn4:
-    st.download_button("Get Data", data =result2.to_csv().encode("utf-8",file_name="Sales_by_Region",mime="text.csv"))
+    st.download_button("Get Data", data =result2.to_csv().encode("utf-8"),file_name="Sales_by_Region",mime="text.csv")
+_,view5,dwn5 = st.columns([0.5,0.45,0.45])
+with view5:
+    expander=st.expander("View Sales Raw Data")
+    expander.write(df)
+with dwn5:
+    st.download_button("Get raw data",data =df.to_csv().encode("utf-8"),file_name="Sales_Raw_Data",mime=("text/csv"))
