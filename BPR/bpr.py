@@ -36,6 +36,7 @@ def substitute_class(location):
         'KK108-2W09-2024-101706': 'CTYJ',
         'KK108-RM08-2024-103459': 'CRH',
         'KK108-TW09-2024-103472': 'CCFI',
+        'KK108-RM22-2024-105940': 'CRV',
         'KK108-2W09-2024-103485': 'CTYJ',
     }
     return class_substitutions.get(location, location)
@@ -76,7 +77,7 @@ def sort_and_display_last_5_days(ics_url):
                 events.append(event_info)
 
             last_5_days_events = filter_last_5_days(events)
-            classes = {'CCFI': [], 'CRH': [], 'CTYJ': [], 'CPSA': []}
+            classes = {'CCFI': [], 'CRH': [], 'CTYJ': [], 'CRV': [],'CPSA': []}
             for event in last_5_days_events:
                 if event['Class'] in classes:
                     classes[event['Class']].append(event)
