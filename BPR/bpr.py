@@ -49,7 +49,7 @@ def filter_last_5_days(events):
     seen_events = set()
     last_5_days_events = [
         event for event in events
-        if today - timedelta(days=90) <= event['start_time'].date() <= today
+        if today - timedelta(days=15) <= event['start_time'].date() <= today
         and (event['Location'], event['start_time'], event['end_time']) not in seen_events
     ]
     seen_events.update((event['Location'], event['start_time'], event['end_time']) for event in last_5_days_events)
