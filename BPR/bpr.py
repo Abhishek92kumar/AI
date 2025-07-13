@@ -31,14 +31,17 @@ def get_day(start_time):
 
 def substitute_class(location):
     class_substitutions = {
-        'KK108-CPSA-2024-104667': 'CPSA',
-        'KK108-TW09-2024-100425': 'CCFI',
-        'KK108-2W09-2024-101706': 'CTYJ',
-        'KK108-RM08-2024-103459': 'CRH',
-        'KK108-TW09-2024-103472': 'CCFI',
-        'KK108-RM22-2024-105940': 'CRV',
-        'KK108-2W09-2024-103485': 'CTYJ',
-    }
+        
+        'KK108-2W05-2025-120713': 'CCFH',
+        
+        'KK108-CPSA-2025-124367': 'CPSA',
+        
+        'KK108-FSW2-2025-121173': 'FSIV',
+        
+        'KK108-MW04-2025-121094': 'CTYE',
+        
+        'KK108-RM15-2025-122783': 'CRO',
+            }
     return class_substitutions.get(location, location)
 
 def filter_last_5_days(events):
@@ -46,7 +49,7 @@ def filter_last_5_days(events):
     seen_events = set()
     last_5_days_events = [
         event for event in events
-        if today - timedelta(days=15) <= event['start_time'].date() <= today
+        if today - timedelta(days=90) <= event['start_time'].date() <= today
         and (event['Location'], event['start_time'], event['end_time']) not in seen_events
     ]
     seen_events.update((event['Location'], event['start_time'], event['end_time']) for event in last_5_days_events)
