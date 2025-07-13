@@ -31,15 +31,10 @@ def get_day(start_time):
 
 def substitute_class(location):
     class_substitutions = {
-        
         'KK108-2W05-2025-120713': 'CCFH',
-        
         'KK108-CPSA-2025-124367': 'CPSA',
-        
         'KK108-FSW2-2025-121173': 'FSIV',
-        
         'KK108-MW04-2025-121094': 'CTYE',
-        
         'KK108-RM15-2025-122783': 'CRO',
             }
     return class_substitutions.get(location, location)
