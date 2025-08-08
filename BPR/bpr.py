@@ -76,7 +76,7 @@ def sort_and_display_last_5_days(ics_url):
                 events.append(event_info)
 
             last_5_days_events = filter_last_5_days(events)
-            classes = {'CCFH': [], 'CRO': [], 'FSIV': [], 'CTYE': [],'CPSA': []}
+            classes = {'CCFH': [], 'CRO': [], 'FSIV': [], 'CTYE': [],'CPSA': [],'CTYG': []}
             for event in last_5_days_events:
                 if event['Class'] in classes:
                     classes[event['Class']].append(event)
