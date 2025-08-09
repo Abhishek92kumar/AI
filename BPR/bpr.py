@@ -39,6 +39,7 @@ def substitute_class(location):
         'KK108-MW06-2025-121101': 'CTYG',
         'KK108-RM15-2025-124776': 'CRO',
         'KK108-RM15-2025-122783': 'CRO',
+        'KK108-CPSA-2025-124367': 'CPSA',        
         
         
             }
