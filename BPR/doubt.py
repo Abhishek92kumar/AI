@@ -43,8 +43,8 @@ st.set_page_config(page_title="Current Status", page_icon="📅")
 
 #     st.success("✅ You are currently FREE")
 
-# # Streamlit app
-# st.title("Live Class/Meeting Status")
+# Streamlit app
+st.title("Live Class/Meeting Status")
 
 # ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"
 
