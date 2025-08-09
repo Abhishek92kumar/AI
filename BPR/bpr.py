@@ -37,6 +37,8 @@ def substitute_class(location):
         'KK108-MW04-2025-121094': 'CTYE',
         'KK108-RM15-2025-122783': 'CRO',
         'KK108-MW06-2025-121101': 'CTYG',
+        'KK108-RM15-2025-124776': 'CRO',
+        
             }
     return class_substitutions.get(location, location)
 
