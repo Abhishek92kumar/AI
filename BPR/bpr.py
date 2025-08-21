@@ -6,12 +6,47 @@ import requests
 
 st.set_page_config(page_title='Aakash Automated BPR', page_icon='🎉')
 
+# def fetch_ics_from_url(ics_url):
+#     response = requests.get(ics_url)
+#     if response.status_code == 200:
+#         return response.text
+#     else:
+#         st.error(f"Failed to fetch the ICS data. HTTP Status Code: {response.status_code}")
+#         return None
+import streamlit as st
+import requests
+import os
+
+CACHE_FILE = "calendar_cache.ics"
+
 def fetch_ics_from_url(ics_url):
-    response = requests.get(ics_url)
-    if response.status_code == 200:
-        return response.text
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/113.0.0.0 Safari/537.36"
+    }
+
+    try:
+        response = requests.get(ics_url, headers=headers, timeout=15)
+        if response.status_code == 200:
+            # st.success("✅ Loaded calendar from Outlook (live).")
+            ics_data = response.text
+            # Cache the data locally
+            with open(CACHE_FILE, "w", encoding="utf-8") as f:
+                f.write(ics_data)
+            return ics_data
+        else:
+            st.warning(f"⚠️ Outlook returned HTTP {response.status_code}. Using cache if available.")
+    except Exception as e:
+        st.error(f"⚠️ Error fetching online: {e}. Using cache if available.")
+
+    # Fallback: Load from cache
+    if os.path.exists(CACHE_FILE):
+        st.info("📂 Loaded calendar data from cache.")
+        with open(CACHE_FILE, "r", encoding="utf-8") as f:
+            return f.read()
     else:
-        st.error(f"Failed to fetch the ICS data. HTTP Status Code: {response.status_code}")
+        st.error("❌ No cache available. Could not fetch calendar.")
         return None
 
 def calculate_duration(start_time, end_time):
