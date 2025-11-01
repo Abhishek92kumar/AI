@@ -178,7 +178,7 @@ import os
 
 # ----------------- STREAMLIT CONFIG -----------------
 st.set_page_config(page_title='Aakash Automated BPR', page_icon='🎉')
-st.title("📅 Aakash Automated BPR – Class Schedule Viewer")
+st.title("📅 Aakash Automated BPR")
 
 # ----------------- ICS FETCHING WITH CACHE -----------------
 CACHE_FILE = "calendar_cache.ics"
@@ -245,7 +245,7 @@ def filter_last_7_days(events):
     filtered = []
 
     for e in events:
-        if today - timedelta(days=7) <= e['start_time'].date() <= today:
+        if today - timedelta(days=50) <= e['start_time'].date() <= today:
             key = (e['Location'], e['start_time'], e['end_time'])
             if key not in seen:
                 seen.add(key)
