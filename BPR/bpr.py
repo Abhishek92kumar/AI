@@ -239,6 +239,8 @@ def get_class_from_description(description):
         return "CTYG"
     elif "2W05" in desc:
         return "CCFH"
+    elif "CPSA" in desc:
+        return "CPSA"
 
     else:
         return "Unknown"
