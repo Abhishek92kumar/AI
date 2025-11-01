@@ -235,6 +235,11 @@ def get_class_from_description(description):
         return "CRR"
     elif "FSIV" in desc:
         return "FSIV"
+    elif "MW06" in desc:
+        return "CTYG"
+    elif "2W05" in desc:
+        return "CCFH"
+
     else:
         return "Unknown"
 
