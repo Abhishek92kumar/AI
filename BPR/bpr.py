@@ -1,22 +1,186 @@
+# import streamlit as st
+# from ics import Calendar
+# from datetime import datetime, timedelta
+# import pandas as pd
+# import requests
+
+# st.set_page_config(page_title='Aakash Automated BPR', page_icon='🎉')
+
+# # def fetch_ics_from_url(ics_url):
+# #     response = requests.get(ics_url)
+# #     if response.status_code == 200:
+# #         return response.text
+# #     else:
+# #         st.error(f"Failed to fetch the ICS data. HTTP Status Code: {response.status_code}")
+# #         return None
+# import streamlit as st
+# import requests
+# import os
+
+# CACHE_FILE = "calendar_cache.ics"
+
+# def fetch_ics_from_url(ics_url):
+#     headers = {
+#         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+#                       "AppleWebKit/537.36 (KHTML, like Gecko) "
+#                       "Chrome/113.0.0.0 Safari/537.36"
+#     }
+
+#     try:
+#         response = requests.get(ics_url, headers=headers, timeout=15)
+#         if response.status_code == 200:
+#             # st.success("✅ Loaded calendar from Outlook (live).")
+#             ics_data = response.text
+#             # Cache the data locally
+#             with open(CACHE_FILE, "w", encoding="utf-8") as f:
+#                 f.write(ics_data)
+#             return ics_data
+#         else:
+#             st.warning(f"⚠️ Outlook returned HTTP {response.status_code}. Using cache if available.")
+#     except Exception as e:
+#         st.error(f"⚠️ Error fetching online: {e}. Using cache if available.")
+
+#     # Fallback: Load from cache
+#     if os.path.exists(CACHE_FILE):
+#         st.info("📂 Loaded calendar data from cache.")
+#         with open(CACHE_FILE, "r", encoding="utf-8") as f:
+#             return f.read()
+#     else:
+#         st.error("❌ No cache available. Could not fetch calendar.")
+#         return None
+
+# def calculate_duration(start_time, end_time):
+#     duration = end_time - start_time
+#     hours, remainder = divmod(duration.total_seconds(), 3600)
+#     minutes = remainder // 60
+#     return f"{int(hours)} hr {int(minutes)} min"
+
+# def get_date(start_time):
+#     return start_time.strftime("%Y-%m-%d")
+
+# def get_time(start_time):
+#     return start_time.strftime("%I:%M %p")
+
+# def get_day(start_time):
+#     return start_time.strftime("%A")
+
+# def substitute_class(location):
+#     class_substitutions = {
+#         'KK108-2W05-2025-120713': 'CCFH',
+#         'KK108-CPSA-2025-121065': 'CPSA',
+#         'KK108-FSW2-2025-121173': 'FSIV',
+#         'KK108-MW04-2025-121094': 'CTYE',
+#         'KK108-RM15-2025-122783': 'CRO',
+#         'KK108-MW06-2025-121101': 'CTYG',
+#         'KK108-RM15-2025-124776': 'CRO',
+#         'KK108-RM15-2025-122783': 'CRO',
+#         'KK108-CPSA-2025-124367': 'CPSA',        
+        
+        
+#             }
+#     return class_substitutions.get(location, location)
+
+# def filter_last_5_days(events):
+#     today = datetime.now().date()
+#     seen_events = set()
+#     last_5_days_events = [
+#         event for event in events
+#         if today - timedelta(days=300) <= event['start_time'].date() <= today
+#         and (event['Location'], event['start_time'], event['end_time']) not in seen_events
+#     ]
+#     seen_events.update((event['Location'], event['start_time'], event['end_time']) for event in last_5_days_events)
+#     return sorted(last_5_days_events, key=lambda x: (x['Class'], x['start_time']), reverse=True)
+
+# def sort_and_display_last_5_days(ics_url):
+#     with st.spinner('Fetching and processing data takes 15-20 seconds...'):
+#         ics_data = fetch_ics_from_url(ics_url)
+
+#         if ics_data:
+#             calendar = Calendar(ics_data)
+#             events = []
+
+#             for event in calendar.events:
+#                 start_time = getattr(event, 'begin', '').datetime
+#                 end_time = getattr(event, 'end', '').datetime
+
+#                 event_info = {
+#                     'Class': substitute_class(getattr(event, 'location', 'Unknown Location')),
+#                     'Duration': calculate_duration(start_time, end_time),
+#                     'Date': get_date(start_time),
+#                     'Time': get_time(start_time),
+#                     'Day': get_day(start_time),
+#                     'start_time': start_time,
+#                     'end_time': end_time,
+#                     'Location': getattr(event, 'location', 'Unknown Location')
+#                 }
+#                 events.append(event_info)
+
+#             last_5_days_events = filter_last_5_days(events)
+#             classes = {'CCFH': [], 'CRO': [], 'FSIV': [], 'CTYE': [],'CPSA': [],'CTYG': []}
+#             for event in last_5_days_events:
+#                 if event['Class'] in classes:
+#                     classes[event['Class']].append(event)
+
+#             for class_name, events in classes.items():
+#                 if events:
+#                     df = pd.DataFrame(events).drop(columns=['start_time', 'end_time'])
+#                     st.subheader(f"Class: {class_name}")
+#                     st.markdown(df.to_html(index=False, classes='styled-table'), unsafe_allow_html=True)
+
+# # Custom CSS for table styling
+# st.markdown("""
+#     <style>
+#         .styled-table {
+#             border-collapse: collapse;
+#             margin: 25px 0;
+#             font-size: 0.9em;
+#             font-family: 'Trebuchet MS', sans-serif;
+#             min-width: 400px;
+#             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+#         }
+#         .styled-table thead tr {
+#             background-color: #009879;
+#             color: #ffffff;
+#             text-align: left;
+#         }
+#         .styled-table th,
+#         .styled-table td {
+#             padding: 12px 15px;
+#         }
+#         .styled-table tbody tr {
+#             border-bottom: 1px solid #dddddd;
+#             background-color: #2d2d2d;
+#             color: #ffffff;
+#         }
+#         .styled-table tbody tr:nth-of-type(even) {
+#             background-color: #3e3e3e;
+#         }
+#         .styled-table tbody tr:last-of-type {
+#             border-bottom: 2px solid #009879;
+#         }
+#     </style>
+# """, unsafe_allow_html=True)
+
+# # Streamlit app
+# st.title("Class Schedule Viewer")
+
+# # Fetch the URL from Streamlit secrets
+# ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"  # Fetch the URL from Streamlit secrets
+# if st.button("Fetch and Display Schedule"):
+#     sort_and_display_last_5_days(ics_url)
+
 import streamlit as st
 from ics import Calendar
 from datetime import datetime, timedelta
 import pandas as pd
 import requests
-
-st.set_page_config(page_title='Aakash Automated BPR', page_icon='🎉')
-
-# def fetch_ics_from_url(ics_url):
-#     response = requests.get(ics_url)
-#     if response.status_code == 200:
-#         return response.text
-#     else:
-#         st.error(f"Failed to fetch the ICS data. HTTP Status Code: {response.status_code}")
-#         return None
-import streamlit as st
-import requests
 import os
 
+# ----------------- STREAMLIT CONFIG -----------------
+st.set_page_config(page_title='Aakash Automated BPR', page_icon='🎉')
+st.title("📅 Aakash Automated BPR – Class Schedule Viewer")
+
+# ----------------- ICS FETCHING WITH CACHE -----------------
 CACHE_FILE = "calendar_cache.ics"
 
 def fetch_ics_from_url(ics_url):
@@ -25,22 +189,18 @@ def fetch_ics_from_url(ics_url):
                       "AppleWebKit/537.36 (KHTML, like Gecko) "
                       "Chrome/113.0.0.0 Safari/537.36"
     }
-
     try:
         response = requests.get(ics_url, headers=headers, timeout=15)
         if response.status_code == 200:
-            # st.success("✅ Loaded calendar from Outlook (live).")
             ics_data = response.text
-            # Cache the data locally
             with open(CACHE_FILE, "w", encoding="utf-8") as f:
                 f.write(ics_data)
             return ics_data
         else:
-            st.warning(f"⚠️ Outlook returned HTTP {response.status_code}. Using cache if available.")
+            st.warning(f"⚠️ Calendar returned HTTP {response.status_code}. Using cache if available.")
     except Exception as e:
         st.error(f"⚠️ Error fetching online: {e}. Using cache if available.")
 
-    # Fallback: Load from cache
     if os.path.exists(CACHE_FILE):
         st.info("📂 Loaded calendar data from cache.")
         with open(CACHE_FILE, "r", encoding="utf-8") as f:
@@ -49,6 +209,7 @@ def fetch_ics_from_url(ics_url):
         st.error("❌ No cache available. Could not fetch calendar.")
         return None
 
+# ----------------- UTILITY FUNCTIONS -----------------
 def calculate_duration(start_time, end_time):
     duration = end_time - start_time
     hours, remainder = divmod(duration.total_seconds(), 3600)
@@ -56,7 +217,7 @@ def calculate_duration(start_time, end_time):
     return f"{int(hours)} hr {int(minutes)} min"
 
 def get_date(start_time):
-    return start_time.strftime("%Y-%m-%d")
+    return start_time.strftime("%d-%m-%Y")
 
 def get_time(start_time):
     return start_time.strftime("%I:%M %p")
@@ -64,78 +225,90 @@ def get_time(start_time):
 def get_day(start_time):
     return start_time.strftime("%A")
 
-def substitute_class(location):
-    class_substitutions = {
-        'KK108-2W05-2025-120713': 'CCFH',
-        'KK108-CPSA-2025-121065': 'CPSA',
-        'KK108-FSW2-2025-121173': 'FSIV',
-        'KK108-MW04-2025-121094': 'CTYE',
-        'KK108-RM15-2025-122783': 'CRO',
-        'KK108-MW06-2025-121101': 'CTYG',
-        'KK108-RM15-2025-124776': 'CRO',
-        'KK108-RM15-2025-122783': 'CRO',
-        'KK108-CPSA-2025-124367': 'CPSA',        
-        
-        
-            }
-    return class_substitutions.get(location, location)
+def get_class_from_description(description):
+    if not description:
+        return "Unknown"
+    desc = description.upper()
+    if "RM15" in desc:
+        return "CRO"
+    elif "RM18" in desc:
+        return "CRR"
+    elif "FSIV" in desc:
+        return "FSIV"
+    else:
+        return "Unknown"
 
-def filter_last_5_days(events):
+# ----------------- FILTER & SORT -----------------
+def filter_last_7_days(events):
     today = datetime.now().date()
-    seen_events = set()
-    last_5_days_events = [
-        event for event in events
-        if today - timedelta(days=300) <= event['start_time'].date() <= today
-        and (event['Location'], event['start_time'], event['end_time']) not in seen_events
-    ]
-    seen_events.update((event['Location'], event['start_time'], event['end_time']) for event in last_5_days_events)
-    return sorted(last_5_days_events, key=lambda x: (x['Class'], x['start_time']), reverse=True)
+    seen = set()
+    filtered = []
 
-def sort_and_display_last_5_days(ics_url):
-    with st.spinner('Fetching and processing data takes 15-20 seconds...'):
+    for e in events:
+        if today - timedelta(days=7) <= e['start_time'].date() <= today:
+            key = (e['Location'], e['start_time'], e['end_time'])
+            if key not in seen:
+                seen.add(key)
+                filtered.append(e)
+
+    filtered.sort(key=lambda x: (x['Class'], x['start_time']), reverse=True)
+    return filtered
+
+# ----------------- MAIN DISPLAY FUNCTION -----------------
+def sort_and_display_schedule(ics_url):
+    with st.spinner('Fetching and processing calendar data...'):
         ics_data = fetch_ics_from_url(ics_url)
+        if not ics_data:
+            return
 
-        if ics_data:
-            calendar = Calendar(ics_data)
-            events = []
+        calendar = Calendar(ics_data)
+        events = []
 
-            for event in calendar.events:
-                start_time = getattr(event, 'begin', '').datetime
-                end_time = getattr(event, 'end', '').datetime
+        for event in calendar.events:
+            start_time = getattr(event, 'begin', '').datetime
+            end_time = getattr(event, 'end', '').datetime
+            description = getattr(event, 'description', '')
+            summary = getattr(event, 'name', getattr(event, 'summary', ''))
+            location = getattr(event, 'location', 'Unknown Location')
 
-                event_info = {
-                    'Class': substitute_class(getattr(event, 'location', 'Unknown Location')),
-                    'Duration': calculate_duration(start_time, end_time),
-                    'Date': get_date(start_time),
-                    'Time': get_time(start_time),
-                    'Day': get_day(start_time),
-                    'start_time': start_time,
-                    'end_time': end_time,
-                    'Location': getattr(event, 'location', 'Unknown Location')
-                }
-                events.append(event_info)
+            event_info = {
+                'Class': get_class_from_description(description),
+                'Date': get_date(start_time),
+                'Day': get_day(start_time),
+                'Time': get_time(start_time),
+                'Duration': calculate_duration(start_time, end_time),
+                'Summary': summary,
+                'Location': location,
+                'start_time': start_time,
+                'end_time': end_time
+            }
+            events.append(event_info)
 
-            last_5_days_events = filter_last_5_days(events)
-            classes = {'CCFH': [], 'CRO': [], 'FSIV': [], 'CTYE': [],'CPSA': [],'CTYG': []}
-            for event in last_5_days_events:
-                if event['Class'] in classes:
-                    classes[event['Class']].append(event)
+        last_7_days_events = filter_last_7_days(events)
+        if not last_7_days_events:
+            st.warning("No events found in the last 7 days.")
+            return
 
-            for class_name, events in classes.items():
-                if events:
-                    df = pd.DataFrame(events).drop(columns=['start_time', 'end_time'])
-                    st.subheader(f"Class: {class_name}")
-                    st.markdown(df.to_html(index=False, classes='styled-table'), unsafe_allow_html=True)
+        # Group by Class
+        classes = {}
+        for e in last_7_days_events:
+            classes.setdefault(e['Class'], []).append(e)
 
-# Custom CSS for table styling
+        for class_name, evts in classes.items():
+            if evts:
+                st.subheader(f"📘 Class: {class_name}")
+                df = pd.DataFrame(evts).drop(columns=['start_time', 'end_time'])
+                st.markdown(df.to_html(index=False, classes='styled-table'), unsafe_allow_html=True)
+
+# ----------------- CSS FOR BEAUTIFUL TABLE -----------------
 st.markdown("""
     <style>
         .styled-table {
             border-collapse: collapse;
-            margin: 25px 0;
+            margin: 20px 0;
             font-size: 0.9em;
             font-family: 'Trebuchet MS', sans-serif;
-            min-width: 400px;
+            min-width: 600px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
         }
         .styled-table thead tr {
@@ -143,8 +316,7 @@ st.markdown("""
             color: #ffffff;
             text-align: left;
         }
-        .styled-table th,
-        .styled-table td {
+        .styled-table th, .styled-table td {
             padding: 12px 15px;
         }
         .styled-table tbody tr {
@@ -161,10 +333,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Streamlit app
-st.title("Class Schedule Viewer")
+# ----------------- RUN APP -----------------
+ics_url = "https://calendar.google.com/calendar/ical/abhishek.fr923%40aesl.in/private-c8d796562ede749a5c878f180c98c62b/basic.ics"
 
-# Fetch the URL from Streamlit secrets
-ics_url = "https://outlook.office365.com/owa/calendar/888f3bb6c2904fd39d8c125e42b7ab8d@aakashicampus.com/bcbe1538d6f34d84b4fe1ab75d7d6d0410158316872069178778/calendar.ics"  # Fetch the URL from Streamlit secrets
-if st.button("Fetch and Display Schedule"):
-    sort_and_display_last_5_days(ics_url)
+if st.button("📥 Fetch and Display Schedule"):
+    sort_and_display_schedule(ics_url)
