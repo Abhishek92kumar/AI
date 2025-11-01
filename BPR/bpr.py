@@ -226,8 +226,8 @@ def get_day(start_time):
     return start_time.strftime("%A")
 
 def get_class_from_description(description):
-    if not description:
-        return "Unknown"
+    # if not description:
+    #     return "Unknown"
     desc = description.upper()
     if "RM15" in desc:
         return "CRO"
