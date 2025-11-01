@@ -242,8 +242,10 @@ def get_class_from_description(description):
     elif "CPSA" in desc:
         return "CPSA"
 
-    # else:
-    #     return "Unknown"
+    else:
+        # return "Unknown"
+        
+        return ""
 
 # ----------------- FILTER & SORT -----------------
 def filter_last_7_days(events):
