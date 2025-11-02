@@ -317,7 +317,7 @@ st.markdown("""
             margin: 20px 0;
             font-size: 0.9em;
             font-family: 'Trebuchet MS', sans-serif;
-            min-width: 600px;
+            min-width: 700px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
         }
         .styled-table thead tr {
