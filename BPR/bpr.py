@@ -327,7 +327,7 @@ st.markdown("""
             text-align: left;
         }
         .styled-table th, .styled-table td {
-            padding: 12px 9px;
+            padding: 12px 15px;
         }
         .styled-table tbody tr {
             border-bottom: 1px solid #dddddd;
