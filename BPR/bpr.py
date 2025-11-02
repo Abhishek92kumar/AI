@@ -278,7 +278,7 @@ def sort_and_display_schedule(ics_url):
             end_time = getattr(event, 'end', '').datetime
             description = getattr(event, 'description', '')
             summary = getattr(event, 'name', getattr(event, 'summary', ''))
-            # location = getattr(event, 'location', 'Unknown Location')
+            location = getattr(event, 'location', 'Unknown Location')
 
             event_info = {
                 'Class': get_class_from_description(description),
@@ -287,7 +287,7 @@ def sort_and_display_schedule(ics_url):
                 'Time': get_time(start_time),
                 'Duration': calculate_duration(start_time, end_time),
                 'Summary': summary,
-                # 'Location': location,
+                'Location': location,
                 'start_time': start_time,
                 'end_time': end_time
             }
