@@ -229,18 +229,18 @@ def get_class_from_description(description):
     # if not description:
         # return "Unknown"
     desc = description.upper()
-    if "RM15" in desc:
-        return "CRO"
-    elif "RM18" in desc:
-        return "CRR"
-    elif "FSW2" in desc:
+    if "FR01" in desc:
+        return "CFSA"
+    elif "9W02" in desc:
+        return "IC9X"
+    elif "8WI1" in desc:
+        return "IC8X"
+    elif "FW02" in desc:
         return "FSIV"
-    elif "MW06" in desc:
-        return "CTYG"
-    elif "2W05" in desc:
-        return "CCFH"
-    elif "CPSA" in desc:
-        return "CPSA"
+    elif "TW04" in desc:
+        return "CTYE"
+    # elif "CPSA" in desc:
+    #     return "CPSA"
 
     else:
         # return "Unknown"
