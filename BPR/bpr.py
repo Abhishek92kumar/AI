@@ -254,7 +254,7 @@ def filter_last_7_days(events):
     filtered = []
 
     for e in events:
-        if today - timedelta(days=50) <= e['start_time'].date() <= today:
+        if today - timedelta(days=90) <= e['start_time'].date() <= today:
             # key = (e['Location'], e['start_time'], e['end_time'])
             key = (e['start_time'], e['end_time'])
             if key not in seen:
